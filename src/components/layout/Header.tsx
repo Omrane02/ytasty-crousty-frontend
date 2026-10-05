@@ -22,6 +22,7 @@ import { useNotify } from "../common/NotificationContext";
 import { RestaurantSelector } from "../restaurant/RestaurantSelector";
 import { Logo } from "./Logo";
 import type { Role } from "../../types/auth";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 
 const ROLE_BADGES: Record<Role, { label: string; color: "primary" | "secondary" | "info" }> = {
   admin: { label: "Admin", color: "primary" },
@@ -74,6 +75,11 @@ export function Header() {
             </Button>
           ) : (
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.25 }}>
+              <Tooltip title="Back-office">
+                <IconButton component={RouterLink} to="/admin" color="inherit" aria-label="Back-office">
+                  <DashboardOutlinedIcon />
+                </IconButton>
+              </Tooltip>
               <Avatar sx={{ width: 36, height: 36, bgcolor: "primary.main", fontWeight: 700 }}>
                 {user.username.charAt(0).toUpperCase()}
               </Avatar>
