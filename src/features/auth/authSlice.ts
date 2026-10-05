@@ -1,6 +1,8 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
-import { isRole, type AuthUser } from "../../types/auth";
+import { requestLogin } from "../../api/authApi";
+import { isRole, type AuthUser, type LoginRequest } from "../../types/auth";
+import { getErrorMessage } from "../../utils/errors";
 import { STORAGE_KEYS, safeGet, safeRemove } from "../../utils/storage";
 import type { RootState } from "../../app/store";
 
@@ -37,17 +39,31 @@ function loadInitialState(): AuthState {
 
   const user = userFromToken(token);
   if (user === null) {
-    safeRemove(STORAGE_KEYS.token);
+    safeRemove(STORAGE_KEYS.token); // token périmé ou corrompu : on nettoie
     return { token: null, user: null };
   }
   return { token, user };
 }
 
+export const login = createAsyncThunk<string, LoginRequest, { rejectValue: string }>(
+  "auth/login",
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const { access_token } = await requestLogin(credentials);
+      if (userFromToken(access_token) === null) {
+        return rejectWithValue("Le serveur a renvoyé un jeton invalide.");
+      }
+      return access_token;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: loadInitialState(),
   reducers: {
-
     setCredentials: (state, action: PayloadAction<{ token: string }>) => {
       const user = userFromToken(action.payload.token);
       if (user === null) return;
@@ -58,6 +74,14 @@ const authSlice = createSlice({
       state.token = null;
       state.user = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(login.fulfilled, (state, action) => {
+      const user = userFromToken(action.payload);
+      if (user === null) return;
+      state.token = action.payload;
+      state.user = user;
+    });
   },
 });
 
