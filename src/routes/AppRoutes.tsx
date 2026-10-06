@@ -16,11 +16,11 @@ export function AppRoutes() {
         <Route index element={<HomePage />} />
         <Route
           path="menu"
-          element={<PlaceholderPage title="La carte" description="La carte du restaurant arrive au prochain module." />}
+          element={<PlaceholderPage title="La carte" description="La carte du restaurant n'est pas encore disponible" />}
         />
         <Route
           path="cart"
-          element={<PlaceholderPage title="Mon panier" description="Le panier arrive au prochain module." />}
+          element={<PlaceholderPage title="Mon panier" description="Le panier n'est pas encore disponible" />}
         />
         <Route path="login" element={<LoginPage />} />
 
