@@ -3,6 +3,7 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { Link as RouterLink } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { selectCurrentUser } from "../../features/auth/authSlice";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 
 export function BackOfficeHomePage() {
   const user = useAppSelector(selectCurrentUser);
@@ -55,14 +56,21 @@ export function BackOfficeHomePage() {
           </CardContent>
         </Card>
 
-        <Card sx={{ opacity: 0.6 }}>
-          <CardContent>
-            <Typography variant="h6">Disponibilité des produits</Typography>
-            <Typography color="text.secondary" variant="body2">
-              Bientôt disponible.
-            </Typography>
-          </CardContent>
+        {(user.role === "admin" || user.role === "staff") && (
+        <Card>
+            <CardContent sx={{ display: "grid", gap: 1.5 }}>
+                <Typography variant="h6">{user.role === "admin" ? "Carte & produits" : "Disponibilité des produits"}</Typography>
+                <Typography color="text.secondary" variant="body2">
+                    {user.role === "admin"
+                        ? "Créer, modifier ou supprimer les produits."
+                        : "Signaler une rupture d'ingrédient en cuisine."}
+                </Typography>
+                <Button component={RouterLink} to="/admin/products" variant="contained" startIcon={<RestaurantMenuIcon />}>
+                     Gérer la carte
+                </Button>
+            </CardContent>
         </Card>
+)}
       </Box>
     </Box>
   );
