@@ -4,6 +4,7 @@ import { STORAGE_KEYS, safeGet } from "../utils/storage";
 const rawBaseURL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
 const baseURL = rawBaseURL.replace(/\/+$/, "");
+export const API_BASE_URL = baseURL;
 
 const axiosInstance = axios.create({
   baseURL,
