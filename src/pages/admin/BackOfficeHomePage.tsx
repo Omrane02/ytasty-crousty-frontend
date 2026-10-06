@@ -4,6 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { selectCurrentUser } from "../../features/auth/authSlice";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import SoupKitchenIcon from "@mui/icons-material/SoupKitchen";
 
 export function BackOfficeHomePage() {
   const user = useAppSelector(selectCurrentUser);
@@ -47,14 +48,19 @@ export function BackOfficeHomePage() {
           </Card>
         )}
 
-        <Card sx={{ opacity: 0.6 }}>
-          <CardContent>
-            <Typography variant="h6">Commandes cuisine</Typography>
-            <Typography color="text.secondary" variant="body2">
-              Bientôt disponible.
-            </Typography>
-          </CardContent>
-        </Card>
+        {(user.role === "admin" || user.role === "staff") && (
+  <Card>
+    <CardContent sx={{ display: "grid", gap: 1.5 }}>
+      <Typography variant="h6">Commandes cuisine</Typography>
+      <Typography color="text.secondary" variant="body2">
+        Suivre et faire avancer les commandes du restaurant.
+      </Typography>
+      <Button component={RouterLink} to="/admin/kitchen" variant="contained" startIcon={<SoupKitchenIcon />}>
+        Ouvrir la cuisine
+      </Button>
+    </CardContent>
+  </Card>
+)}
 
         {(user.role === "admin" || user.role === "staff") && (
         <Card>

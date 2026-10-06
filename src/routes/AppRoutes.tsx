@@ -7,6 +7,7 @@ import { LoginPage } from "../pages/LoginPage";
 import { PlaceholderPage } from "../pages/PlaceholderPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ProductsAdminPage } from "../pages/admin/ProductsAdminPage";
+import { KitchenPage } from "../pages/admin/KitchenPage";
 
 export function AppRoutes() {
   return (
@@ -31,6 +32,7 @@ export function AppRoutes() {
           </Route>
           <Route element={<ProtectedRoute allowedRoles={["staff", "admin"]} />}>
           <Route path="admin/products" element={<ProductsAdminPage />} />
+          <Route path="admin/kitchen" element={<KitchenPage />} />
           </Route>
         </Route>
 
