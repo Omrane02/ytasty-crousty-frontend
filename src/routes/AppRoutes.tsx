@@ -6,6 +6,7 @@ import { HomePage } from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 import { PlaceholderPage } from "../pages/PlaceholderPage";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { ProductsAdminPage } from "../pages/admin/ProductsAdminPage";
 
 export function AppRoutes() {
   return (
@@ -22,11 +23,14 @@ export function AppRoutes() {
         />
         <Route path="login" element={<LoginPage />} />
 
-        {/* Back-office : connexion obligatoire, puis filtrage par rôle */}
+
         <Route element={<ProtectedRoute allowedRoles={["staff", "admin", "direction"]} />}>
           <Route path="admin" element={<BackOfficeHomePage />} />
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
             <Route path="admin/users" element={<CreateUserPage />} />
+          </Route>
+          <Route element={<ProtectedRoute allowedRoles={["staff", "admin"]} />}>
+          <Route path="admin/products" element={<ProductsAdminPage />} />
           </Route>
         </Route>
 
